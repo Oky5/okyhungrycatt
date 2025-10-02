@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta charset="utf-8">
+    <title>Hungry Purrsuit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffe4e1;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            height: 100vh;
+            touch-action: none;
+        }
+        header {
+            background-color: #ff69b4;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            border-radius: 0;
+            margin-bottom: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        header > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header-left {
+            text-align: left;
+        }
+        .header-left h1 {
+            color: white;
+            font-size: 1.5em;
+            margin: 0;
+        }
+        .header-left p {
+            color: white;
+            font-size: 0.9em;
+            margin: 3px 0;
+        }
+        .header-left a {
+            color: #fff;
+            text-decoration: underline;
+        }
+        #share-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #share-buttons p {
+            color: white;
+            margin: 3px 0;
+            font-size: 0.8em;
+        }
+        #share-buttons a img {
+            width: 24px;
+            height: 24px;
+            filter: invert(1);
+            margin: 0 3px;
+        }
+        .share-icons {
+            display: flex;
+            gap: 5px;
+        }
+        #game-container-wrapper {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            overflow: hidden;
+            background-color: #8a2be2;
+        }
+        #game-container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            touch-action: none;
+            box-sizing: border-box;
+            background-color: #8a2be2;
+        }
+        #game {
+            text-align: center;
+            padding: 20px;
+            max-width: 90%;
+            margin-top: 80px;
+            background-color: #ffe4e1;
+            border-radius: 10px;
+        }
+        #game h2 {
+            color: #ff69b4;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        #game p {
+            color: green;
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+        .buttons-container {
+            text-align: center;
+            margin: 20px 0;
+            width: 100%;
+        }
+        .veg {
+            padding: 12px 24px;
+            font-size: 1.2em;
+            cursor: pointer;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        .veg:hover {
+            background-color: #ff1493;
+        }
+        #shoot-btn {
+            position: fixed;
+            bottom: calc(12px + env(safe-area-inset-bottom, 12px));
+            right: calc(12px + env(safe-area-inset-right, 12px));
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            font-size: 24px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            z-index: 100;
+            user-select: none;
+        }
+        #shoot-btn:active {
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0.95);
+        }
+        #traktir-text {
+            position: fixed;
+            bottom: calc(80px + env(safe-area-inset-bottom, 12px));
+            right: calc(12px + env(safe-area-inset-right, 12px));
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            text-align: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 180px;
+            line-height: 1.3;
+            display: none;
+        }
+        #snack-message {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 16px;
+            z-index: 100;
+            display: none;
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+        #quote-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            z-index: 100;
+            display: none;
+            text-align: center;
+            max-width: 80%;
+        }
+        #home-building {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            z-index: 100;
+            display: none;
+            text-align: center;
+            max-width: 90%;
+            font-family: monospace;
+        }
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            touch-action: none;
+            max-width: 100%;
+            max-height: 100%;
+            background-color: #8a2be2;
+        }
+        @supports (padding: max(0px)) {
+            #game-container-wrapper {
+                padding-top: max(12px, env(safe-area-inset-top));
+                padding-bottom: max(12px, env(safe-area-inset-bottom));
+                padding-left: max(12px, env(safe-area-inset-left));
+                padding-right: max(12px, env(safe-area-inset-right));
+            }
+        }
+        @media (max-width: 768px) {
+            header > div {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .header-left {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            #share-buttons {
+                margin-top: 10px;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <div class="header-left">
+                <h1>My Spotify Page</h1>
+                <p>Check out my tunes here: <a href="https://open.spotify.com/intl-id/artist/4PjrNKRySnpixMFBWkxJ5d">My Spotify</a></p>
+                <p>Visit my website: <a href="https://okyderana.vercel.app/">Visit my website</a></p>
+            </div>
+            <div id="share-buttons">
+                <p>Share:</p>
+                <div class="share-icons">
+                    <a href="https://wa.me/?text=Check%20out%20this%20fun%20game:%20Hungry%20Purrsuit!%20%F0%9F%98%B8%20Play%20now:%20https://hungrycatt.vercel.app" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+                    </a>
+                    <a href="https://www.instagram.com/direct/t/?text=Check%20out%20this%20fun%20game:%20Hungry%20Purrsuit!%20%F0%9F%98%B8%20Play%20now:%20https://hungrycatt.vercel.app" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" />
+                    </a>
+                    <a href="javascript:void(0);" onclick="navigator.share({title: 'Hungry Purrsuit', text: 'Check out this fun game!', url: 'https://hungrycatt.vercel.app'})">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/Share_icon.svg" alt="Share" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section id="game">
+        <h2>Hungry Purrsuit</h2>
+        <p>
+            Help the hungry cat build its home by eating veggies.<br>
+            Swipe on the game screen to move the cat.<br>
+            Tap the broccoli button to shoot.
+        </p>
+        <div class="buttons-container">
+            <button class="veg" onclick="startGame()">Play Game</button>
+        </div>
+    </section>
+    <div id="game-container-wrapper">
+        <div id="game-container"></div>
+    </div>
+    <div id="shoot-btn" style="display: none;">🥦</div>
+    <div id="traktir-text">
+        Traktir saya dong<br>
+        <span style="font-size: 14px; font-family: Arial, sans-serif;">support creator BCA: 5065189817</span>
+    </div>
+    <div id="snack-message">What a good snack! You should snack veggies too.</div>
+    <div id="quote-message"></div>
+    <div id="home-building">
+        <pre></pre>
+        <p>Building the cat's home... Thank you!</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <script>
+        // Define home designs for each level
+        const homeDesigns = [
+            // Level 1
+            `
+  /\\
+ /  \\
+/____\\
+|📖  🏠  📖|
+|🏠  🚪  🏠|
+|__________🏠|
+            `,
+            // Level 2
+            `
+    /\\
+   /  \\
+  /____\\
+ /      \\
+/________\\
+|📖  🏠  📚|
+|📚  🚪  📖|
+|__________🏠|
+|  🌿  🌿  🌿  |
+            `,
+            // Level 3
+            `
+      /\\
+     /  \\
+    /____\\
+   /      \\
+  /________\\
+ /          \\
+/____________\\
+|📖  🏠  📚|
+|📚  🚪  📖|
+|__________🏠|
+|  🌿  🌿  🌿  |
+|  🌸  🌸  🌸  |
+|📚  📖  📚|
+            `,
+            // Level 4
+            `
+        /\\
+       /  \\
+      /____\\
+     /      \\
+    /________\\
+   /          \\
+  /____________\\
+ /              \\
+/________________\\
+|📖  🏠  📚|
+|📚  🚪  📖|
+|__________🏠|
+|  🌿  🌿  🌿  |
+|  🌸  🌸  🌸  |
+|📚  📖  📚|
+|📖  📚  📖|
+            `,
+            // Level 5
+            `
+          /\\
+         /  \\
+        /____\\
+       /      \\
+      /________\\
+     /          \\
+    /____________\\
+   /              \\
+  /________________\\
+ /                  \\
+/____________________\\
+|📖  🏠  📚|
+|📚  🚪  📖|
+|__________🏠|
+|  🌿  🌿  🌿  |
+|  🌸  🌸  🌸  |
+|📚  📖  📚|
+|📖  📚  📖|
+|📚  📖  📚|
+            `,
+            // Level 6
+            `
+            /\\
+           /  \\
+          /____\\
+         /      \\
+        /________\\
+       /          \\
+      /____________\\
+     /              \\
+    /________________\\
+   /                  \\
+  /____________________\\
+ /                      \\
+/________________________\\
+|📖  🏠  📚|
+|📚  🚪  📖|
+|__________🏠|
+|  🌿  🌿  🌿  |
+|  🌸  🌸  🌸  |
+|📚  📖  📚|
+|📖  📚  📖|
+|📚  📖  📚|
+|📚  📚  📖|
+            `,
+            // Level 7
+            `
+              /\\
+             /  \\
+            /____\\
+           /      \\
+          /________\\
+         /          \\
+        /____________\\
+       /              \\
+      /________________\\
+     /                  \\
+    /____________________\\
+   /                      \\
+  /________________________\\
+ /                          \\
+/____________________________\\
+|📖  🏠  📚|
+|📚  🚪  📖|
+|__________🏠|
+|  🌿  🌿  🌿  |
+|  🌸  🌸  🌸  |
+|📚  📖  📚|
+|📖  📚  📖|
+|📚  📖  📚|
+|📚  📚  📖|
+|📚  📚  📖|
+            `,
+            // Level 8
+            `
+                /\\
+               /  \\
+              /____\\
+             /      \\
+            /________\\
+           /          \\
+          /____________\\
+         /              \\
+        /________________\\
+       /                  \\
+      /____________________\\
+     /                      \\
+    /________________________\\
+   /                          \\
+  /____________________________\\
+ /                              \\
+/________________________________\\
+|📖  🏠  📚|
+|📚  🚪  📖|
+|__________🏠|
+|  🌿  🌿  🌿  |
+|  🌸  🌸  🌸  |
+|📚  📖  📚|
+|📖  📚  📖|
+|📚  📖  📚|
+|📚  📚  📖|
+|📚  📚  📖|
+|📚  📚  📖|
+            `
+        ];
+        document.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        let gameScene = null;
+        function startGame() {
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('game-container-wrapper').style.display = 'block';
+            document.getElementById('shoot-btn').style.display = 'block';
+            document.getElementById('traktir-text').style.display = 'block';
+        }
+        function showHomeBuilding(level) {
+            const homeBuilding = document.getElementById('home-building');
+            homeBuilding.innerHTML = `
+                <pre>${homeDesigns[level - 1]}</pre>
+                <p>Building the cat's home... Thank you!</p>
+            `;
+            homeBuilding.style.display = 'block';
+            setTimeout(() => {
+                homeBuilding.style.display = 'none';
+            }, 3000);
+        }
+        document.getElementById('game-container').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, false);
+        document.getElementById('game-container').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, false);
+        document.getElementById('shoot-btn').addEventListener('touchend', () => {
+            if (gameScene) gameScene.shootBroccoli();
+        }, false);
+        function handleSwipe() {
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (diffX > 0) {
+                    gameScene.handleMove('left');
+                } else {
+                    gameScene.handleMove('right');
+                }
+            } else {
+                if (diffY > 0) {
+                    gameScene.handleMove('up');
+                } else {
+                    gameScene.handleMove('down');
+                }
+            }
+        }
+        function showSnackMessage() {
+            const snackMessage = document.getElementById('snack-message');
+            snackMessage.style.display = 'block';
+            setTimeout(() => {
+                snackMessage.style.display = 'none';
+            }, 2000);
+        }
+        function showQuoteMessage(quote, author) {
+            const quoteMessage = document.getElementById('quote-message');
+            quoteMessage.innerHTML += `<strong>"${quote}"</strong><br><em>— ${author}</em><br>`;
+            quoteMessage.style.display = 'block';
+            setTimeout(() => {
+                quoteMessage.style.display = 'none';
+                quoteMessage.innerHTML = '';
+            }, 8000);
+        }
+        const GAME_WIDTH = window.innerWidth;
+        const GAME_HEIGHT = window.innerHeight;
+        const TILE = Math.min(GAME_WIDTH, GAME_HEIGHT) / 24;
+        const COLS = 28;
+        const ROWS = 20;
+        class BootScene extends Phaser.Scene {
+            constructor() { super('BootScene'); }
+            preload() {}
+            create() { this.scene.start('MenuScene'); }
+        }
+        class MenuScene extends Phaser.Scene {
+            constructor() { super('MenuScene'); }
+            create() {
+                const centerX = this.cameras.main.centerX;
+                const centerY = this.cameras.main.centerY;
+                this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x8a2be2, 0.7).setOrigin(0);
+                const title = this.add.text(centerX, centerY - 120, 'HUNGRY PURRSUIT', {
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '44px',
+                    color: '#ffe9b5',
+                    stroke: '#001424',
+                    strokeThickness: 6
+                }).setOrigin(0.5);
+                const subtitle = this.add.text(centerX, centerY - 70, 'Feed the cat — build its home', {
+                    fontSize: '18px',
+                    color: '#cfe0ff'
+                }).setOrigin(0.5);
+                this.catSprite = this.add.text(centerX, centerY - 10, '😺', { fontSize: '78px' }).setOrigin(0.5);
+                const startBtn = this.add.rectangle(centerX, centerY + 80, 220, 56, 0x2e6fb6, 1).setStrokeStyle(3, 0x091426).setInteractive();
+                const startTxt = this.add.text(centerX, centerY + 80, 'START GAME', {
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    color: '#fff'
+                }).setOrigin(0.5);
+                startBtn.on('pointerdown', () => {
+                    document.getElementById('game').style.display = 'none';
+                    this.scene.start('GameScene', { startLevel: 1 });
+                });
+                this.add.text(centerX, centerY + 150, 'Swipe to move • Tap broccoli to shoot', {
+                    fontSize: '13px',
+                    color: '#bcd2ff'
+                }).setOrigin(0.5);
+            }
+        }
+        class GameScene extends Phaser.Scene {
+            constructor() { super('GameScene'); }
+            init(data) { this.startLevel = data.startLevel || 1; }
+            create() {
+                gameScene = this;
+                this.level = this.startLevel;
+                this.maxLevel = 8;
+                this.lives = 3;
+                this.score = 0;
+                this.collectCount = 0;
+                this.ratsToShoot = 0;
+                this.ratsShot = 0;
+                // Background color
+                this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x8a2be2).setOrigin(0);
+                // Add clouds and rain
+                this.clouds = this.add.group();
+                this.rain = this.add.group();
+                this.sun = null;
+                // Create clouds (positioned below the share buttons)
+                for (let i = 0; i < 10; i++) {
+                    const cloud = this.add.text(
+                        Phaser.Math.Between(0, this.scale.width),
+                        Phaser.Math.Between(100, 200), // Adjusted Y position
+                        '☁️', { fontSize: '40px' }
+                    ).setOrigin(0.5);
+                    this.clouds.add(cloud);
+                    this.tweens.add({
+                        targets: cloud,
+                        x: Phaser.Math.Between(0, this.scale.width),
+                        duration: Phaser.Math.Between(20000, 40000),
+                        repeat: -1,
+                        yoyo: true
+                    });
+                }
+                // Rain logic
+                this.isRaining = true;
+                // Create rain
+                this.time.addEvent({
+                    delay: 100,
+                    loop: true,
+                    callback: () => {
+                        const raindrop = this.add.text(
+                            Phaser.Math.Between(0, this.scale.width),
+                            0,
+                            '💧', { fontSize: '16px' }
+                        ).setOrigin(0.5);
+                        this.rain.add(raindrop);
+                        this.tweens.add({
+                            targets: raindrop,
+                            y: this.scale.height,
+                            duration: Phaser.Math.Between(3000, 5000),
+                            onComplete: () => raindrop.destroy()
+                        });
+                    }
+                });
+                // Sunshine logic (only for level 8)
+                if (this.level === 8) {
+                    this.rainTimer = 0;
+                    this.rainDuration = Phaser.Math.Between(5000, 10000);
+                    this.sunDuration = Phaser.Math.Between(3000, 7000);
+                    this.time.addEvent({
+                        delay: 1000,
+                        loop: true,
+                        callback: () => {
+                            this.rainTimer += 1000;
+                            if (this.rainTimer >= this.rainDuration && this.isRaining) {
+                                this.isRaining = false;
+                                this.rainTimer = 0;
+                                this.rainDuration = Phaser.Math.Between(5000, 10000);
+                                if (!this.sun) {
+                                    this.sun = this.add.text(
+                                        this.scale.width / 2,
+                                        100,
+                                        '☀️', { fontSize: '50px' }
+                                    ).setOrigin(0.5);
+                                }
+                            } else if (this.rainTimer >= this.sunDuration && !this.isRaining) {
+                                this.isRaining = true;
+                                this.rainTimer = 0;
+                                this.sunDuration = Phaser.Math.Between(3000, 7000);
+                                if (this.sun) {
+                                    this.sun.destroy();
+                                    this.sun = null;
+                                }
+                            }
+                        }
+                    });
+                }
+                // Play area setup
+                const playWidth = COLS * TILE;
+                const playHeight = ROWS * TILE;
+                this.playX = Math.round((this.scale.width - playWidth) / 2);
+                this.playY = Math.round((this.scale.height - playHeight) / 2) + 30;
+                this.playArea = this.add.container(this.playX, this.playY);
+                const g = this.add.graphics();
+                g.fillStyle(0x4b0082, 1);
+                g.fillRoundedRect(0, 0, playWidth, playHeight, 12);
+                this.playArea.add(g);
+                // Rest of the create() method (maze, player, veggies, etc.)
+                this.createMaze(this.level);
+                this.wallGraphics = this.add.graphics();
+                this.playArea.add(this.wallGraphics);
+                this.drawMazeWalls();
+                this.settled = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+                this.veggies = this.add.group();
+                this.activeTetro = null;
+                this.tetrominos = this.add.group();
+                this.createPlayer();
+                this.rats = this.add.group();
+                if (this.level >= 6) {
+                    this.ratsToShoot = this.level === 6 ? 2 : this.level === 7 ? 3 : 5;
+                    this.createRats(this.ratsToShoot);
+                }
+                this.broccoliGroup = this.add.group();
+                this.createUI();
+                this.pauseOverlay = this.createPauseOverlay();
+                this.pauseOverlay.setVisible(false);
+                this.cursors = this.input.keyboard.createCursorKeys();
+                this.keyW = this.input.keyboard.addKey('W');
+                this.keyA = this.input.keyboard.addKey('A');
+                this.keyS = this.input.keyboard.addKey('S');
+                this.keyD = this.input.keyboard.addKey('D');
+                this.keyP = this.input.keyboard.addKey('P');
+                this.keySpace = this.input.keyboard.addKey('SPACE');
+                // Make each level slightly longer
+                this.needed = 6 + this.level * 3; // Increased from 4 + this.level * 2
+                this.updateNeeded();
+                this.placeVeggies(this.needed);
+                this.tetroTimer = 0;
+                this.tetroDelay = Math.max(700 - this.level * 80, 220);
+                this.time.addEvent({ delay: 900, loop: true, callback: () => this.periodicSpawn() });
+                this.invuln = false;
+                this.isPaused = false;
+                this.physics.add.overlap(this.broccoliGroup, this.rats, this.hitRat, null, this);
+                this._moveCooldown = 0;
+                this.moveInterval = 80;
+            }
+            update(time, delta) {
+                // Ensure clouds and rain are always behind the game
+                this.clouds.setDepth(0);
+                this.rain.setDepth(1);
+                if (this.sun) this.sun.setDepth(2);
+                if (Phaser.Input.Keyboard.JustDown(this.keyP)) {
+                    this.isPaused = !this.isPaused;
+                    this.pauseOverlay.setVisible(this.isPaused);
+                    if (this.isPaused) this.scene.pause();
+                    else this.scene.resume();
+                    return;
+                }
+                if (this.isPaused) return;
+                if (Phaser.Input.Keyboard.JustDown(this.keySpace)) this.shootBroccoli();
+                this._moveCooldown += delta;
+                if (this._moveCooldown >= this.moveInterval) {
+                    let dir = null;
+                    if (this.cursors.left.isDown || this.keyA.isDown) dir = 'left';
+                    else if (this.cursors.right.isDown || this.keyD.isDown) dir = 'right';
+                    else if (this.cursors.up.isDown || this.keyW.isDown) dir = 'up';
+                    else if (this.cursors.down.isDown || this.keyS.isDown) dir = 'down';
+                    if (dir) {
+                        this.handleMove(dir);
+                        this._moveCooldown = 0;
+                    }
+                }
+                this.updateActiveTetro(delta);
+                this.rats.getChildren().forEach(ratSprite => {
+                    const rat = ratSprite.ratData;
+                    rat.moveTimer += delta;
+                    if (rat.moveTimer >= rat.moveInterval) {
+                        rat.moveTimer = 0;
+                        this.moveRat(rat);
+                    }
+                });
+                let inHazard = false;
+                if (this.player.gy >= 0 && this.player.gy < ROWS && this.player.gx >= 0 && this.player.gx < COLS && this.settled[this.player.gy][this.player.gx]) inHazard = true;
+                if (this.activeTetro) {
+                    for (const p of this.activeTetro.shape) {
+                        const gx = this.activeTetro.x + p.x, gy = this.activeTetro.y + p.y;
+                        if (gx === this.player.gx && gy === this.player.gy) inHazard = true;
+                    }
+                }
+                this.rats.getChildren().forEach(rat => {
+                    const ratData = rat.ratData;
+                    if (ratData.gx === this.player.gx && ratData.gy === this.player.gy) inHazard = true;
+                });
+                if (inHazard) this.loseLife();
+            }
+            // Rest of the GameScene methods (createMaze, createPlayer, etc.)
+            createMaze(difficulty) {
+                this.maze = Array.from({ length: ROWS }, () => Array(COLS).fill(1));
+                const carve = (x, y) => {
+                    this.maze[y][x] = 0;
+                    const dirs = Phaser.Utils.Array.Shuffle([[2, 0], [-2, 0], [0, 2], [0, -2]]);
+                    for (const [dx, dy] of dirs) {
+                        const nx = x + dx, ny = y + dy;
+                        if (nx > 0 && nx < COLS - 1 && ny > 0 && ny < ROWS - 1 && this.maze[ny][nx] === 1) {
+                            this.maze[y + dy / 2][x + dx / 2] = 0;
+                            carve(nx, ny);
+                        }
+                    }
+                };
+                carve(1, 1);
+                for (let x = 0; x < COLS; x++) this.maze[0][x] = this.maze[ROWS - 1][x] = 1;
+                for (let y = 0; y < ROWS; y++) this.maze[y][0] = this.maze[y][COLS - 1] = 1;
+            }
+            drawMazeWalls() {
+                this.wallGraphics.clear();
+                this.wallGraphics.fillStyle(0x0f2a36, 1);
+                for (let y = 0; y < ROWS; y++) {
+                    for (let x = 0; x < COLS; x++) {
+                        if (this.maze[y][x] === 1) {
+                            const px = x * TILE + 2, py = y * TILE + 2, s = TILE - 4;
+                            this.wallGraphics.fillRoundedRect(px, py, s, s, 6);
+                        }
+                    }
+                }
+            }
+            createPlayer() {
+                const start = this.findOpenCell(2, 2);
+                this.player = {
+                    gx: start.x,
+                    gy: start.y,
+                    sprite: this.add.text(0, 0, '😺', { fontSize: '26px' }).setOrigin(0.5)
+                };
+                this.playArea.add(this.player.sprite);
+                this.updatePlayerSpritePosition();
+                this.physics.world.enable(this.player.sprite);
+                this.player.sprite.body.setCollideWorldBounds(true);
+            }
+            createRats(numRats) {
+                for (let i = 0; i < numRats; i++) {
+                    const start = this.findOpenCell(COLS - 3, ROWS - 3);
+                    const ratSprite = this.add.text(0, 0, '🐀', { fontSize: '26px' }).setOrigin(0.5);
+                    this.playArea.add(ratSprite);
+                    this.physics.world.enable(ratSprite);
+                    const rat = {
+                        gx: start.x,
+                        gy: start.y,
+                        sprite: ratSprite,
+                        moveTimer: 0,
+                        moveInterval: 300 - (this.level - 5) * 50
+                    };
+                    this.updateRatSpritePosition(rat);
+                    this.rats.add(rat.sprite);
+                    rat.sprite.ratData = rat;
+                }
+            }
+            updateRatSpritePosition(rat) {
+                rat.sprite.x = rat.gx * TILE + TILE / 2;
+                rat.sprite.y = rat.gy * TILE + TILE / 2;
+            }
+            moveRat(rat) {
+                const dx = this.player.gx - rat.gx;
+                const dy = this.player.gy - rat.gy;
+                let newRatX = rat.gx;
+                let newRatY = rat.gy;
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    if (dx > 0) newRatX++;
+                    else newRatX--;
+                } else {
+                    if (dy > 0) newRatY++;
+                    else newRatY--;
+                }
+                if (newRatX >= 0 && newRatX < COLS && newRatY >= 0 && newRatY < ROWS && this.maze[newRatY][newRatX] === 0 && !this.settled[newRatY][newRatX]) {
+                    rat.gx = newRatX;
+                    rat.gy = newRatY;
+                    this.updateRatSpritePosition(rat);
+                }
+            }
+            shootBroccoli() {
+                const projectile = this.add.text(this.player.sprite.x, this.player.sprite.y, '🥦', { fontSize: '20px' }).setOrigin(0.5);
+                this.playArea.add(projectile);
+                this.broccoliGroup.add(projectile);
+                this.physics.world.enable(projectile);
+                projectile.body.setVelocityY(-200);
+            }
+            hitRat(projectile, rat) {
+                projectile.destroy();
+                rat.destroy();
+                this.score += 50;
+                this.ratsShot++;
+                this.updateScore();
+                if (this.ratsShot === this.ratsToShoot) this.onLevelComplete();
+            }
+            createUI() {
+                this.uiScore = this.add.text(12, 12, `Score: ${this.score}`, { fontSize: '16px', color: '#fff' }).setScrollFactor(0).setDepth(20).setOrigin(0, 0);
+                this.uiLevel = this.add.text(12, 36, `Level: ${this.level}`, { fontSize: '14px', color: '#cfe0ff' }).setScrollFactor(0).setDepth(20).setOrigin(0, 0);
+                this.uiLives = this.add.text(12, 56, `Lives: ${this.lives}`, { fontSize: '14px', color: '#ffd1d1' }).setScrollFactor(0).setDepth(20).setOrigin(0, 0);
+                this.uiNeeded = this.add.text(this.scale.width - 12, 12, `Need: 0`, { fontSize: '16px', color: '#fff' }).setOrigin(1, 0);
+                if (this.level >= 6) this.uiRats = this.add.text(this.scale.width - 12, 36, `Rats: ${this.ratsToShoot - this.ratsShot}`, { fontSize: '14px', color: '#cfe0ff' }).setOrigin(1, 0);
+                this.uiMsg = this.add.text(this.scale.width / 2, this.scale.height - 58, '', { fontSize: '16px', color: '#fff' }).setOrigin(0.5);
+            }
+            createPauseOverlay() {
+                const overlay = this.add.container(this.scale.width / 2, this.scale.height / 2).setDepth(100);
+                const bg = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000, 0.8).setOrigin(0.5);
+                const text = this.add.text(0, 0, 'PAUSED', { fontSize: '40px', color: '#fff', fontWeight: 'bold' }).setOrigin(0.5);
+                overlay.add([bg, text]);
+                return overlay;
+            }
+            findOpenCell(cx = 2, cy = 2) {
+                for (let r = 0; r < Math.max(COLS, ROWS); r++) {
+                    for (let dy = -r; dy <= r; dy++) {
+                        for (let dx = -r; dx <= r; dx++) {
+                            const x = cx + dx, y = cy + dy;
+                            if (x >= 0 && x < COLS && y >= 0 && y < ROWS && this.maze[y][x] === 0 && !this.settled[y][x]) return { x, y };
+                        }
+                    }
+                }
+                return { x: cx, y: cy };
+            }
+            placeVeggies(n) {
+                const types = ['carrot', 'broccoli', 'spinach'];
+                let attempts = 0;
+                while (this.veggies.getLength() < n && attempts++ < 2000) {
+                    const x = 1 + Math.floor(Math.random() * (COLS - 2));
+                    const y = 1 + Math.floor(Math.random() * (ROWS - 2));
+                    if (this.maze[y][x] === 0 && !this.veggieAt(x, y) && !(this.player && this.player.gx === x && this.player.gy === y)) {
+                        const t = types[Math.floor(Math.random() * types.length)];
+                        const v = this.add.text(x * TILE + TILE / 2, y * TILE + TILE / 2, veggieEmoji(t), { fontSize: '20px' }).setOrigin(0.5);
+                        v.gx = x; v.gy = y; v.type = t;
+                        this.playArea.add(v);
+                        this.veggies.add(v);
+                    }
+                }
+            }
+            veggieAt(x, y) {
+                return this.veggies.getChildren().some(v => v.gx === x && v.gy === y);
+            }
+            periodicSpawn() {
+                if (this.isPaused) return;
+                if (!this.activeTetro && Math.random() < 0.45 + this.level * 0.05) this.spawnTetro();
+                if (Math.random() < 0.35) this.placeVeggies(this.needed);
+            }
+            spawnTetro() {
+                const SHAPES = [
+                    [{x:0,y:0},{x:1,y:0},{x:0,y:1},{x:1,y:1}],
+                    [{x:-1,y:0},{x:0,y:0},{x:1,y:0},{x:2,y:0}],
+                    [{x:0,y:0},{x:1,y:0},{x:1,y:1},{x:2,y:1}],
+                    [{x:1,y:0},{x:2,y:0},{x:0,y:1},{x:1,y:1}],
+                    [{x:0,y:0},{x:0,y:1},{x:1,y:1},{x:2,y:1}],
+                    [{x:2,y:0},{x:0,y:1},{x:1,y:1},{x:2,y:1}],
+                    [{x:1,y:0},{x:0,y:1},{x:1,y:1},{x:2,y:1}]
+                ];
+                const idx = Phaser.Math.Between(0, SHAPES.length - 1);
+                const shape = SHAPES[idx];
+                const spawnX = Phaser.Math.Between(3, COLS - 5);
+                const startY = -3;
+                const tet = { shape, x: spawnX, y: startY, timer: 0, dropMs: Math.max(260 - this.level * 30, 100) };
+                this.activeTetro = tet;
+                tet.pieces = [];
+                for (const p of shape) {
+                    const px = (tet.x + p.x) * TILE + TILE / 2;
+                    const py = (tet.y + p.y) * TILE + TILE / 2;
+                    const t = this.add.text(px, py, '', { fontSize: '26px' }).setOrigin(0.5);
+                    this.playArea.add(t);
+                    tet.pieces.push({ rect: t, rx: p.x, ry: p.y });
+                }
+                this.tetrominos.addMultiple(tet.pieces.map(o => o.rect));
+            }
+            updateActiveTetro(dt) {
+                if (!this.activeTetro) return;
+                const t = this.activeTetro;
+                t.timer += dt;
+                if (t.timer >= t.dropMs) {
+                    t.timer = 0;
+                    t.y += 1;
+                    if (this.tetroCollides(t)) {
+                        t.y -= 1;
+                        this.tetrominoSettle(t);
+                        t.pieces.forEach(p => p.rect.destroy());
+                        this.activeTetro = null;
+                        this.clearFullRows();
+                        return;
+                    }
+                    for (const p of t.pieces) {
+                        p.rect.x = (t.x + p.x) * TILE + TILE / 2;
+                        p.rect.y = (t.y + p.ry) * TILE + TILE / 2;
+                    }
+                }
+            }
+            tetroCollides(t) {
+                for (const p of t.shape) {
+                    const gx = t.x + p.x, gy = t.y + p.y;
+                    if (gy >= ROWS) return true;
+                    if (gx < 0 || gx >= COLS || gy < 0) return true;
+                    if (this.maze[gy][gx] === 1) return true;
+                    if (this.settled[gy][gx]) return true;
+                }
+                return false;
+            }
+            tetrominoSettle(t) {
+                for (const p of t.shape) {
+                    const gx = t.x + p.x, gy = t.y + p.y;
+                    if (gy >= 0 && gy < ROWS && gx >= 0 && gx < COLS) {
+                        this.settled[gy][gx] = 1;
+                        const block = this.add.text(gx * TILE + TILE / 2, gy * TILE + TILE / 2, '', { fontSize: '26px' }).setOrigin(0.5);
+                        this.playArea.add(block);
+                    }
+                }
+                for (let i = this.veggies.getLength() - 1; i >= 0; i--) {
+                    const v = this.veggies.getChildren()[i];
+                    if (this.settled[v.gy][v.gx]) {
+                        v.destroy();
+                        this.score = Math.max(0, this.score - 5);
+                        this.updateScore();
+                        this.uiMsg.setText('A veggie got covered!');
+                    }
+                }
+            }
+            clearFullRows() {
+                for (let y = ROWS - 1; y >= 0; y--) {
+                    if (this.settled[y].every(c => c === 1)) {
+                        this.settled.splice(y, 1);
+                        this.settled.unshift(Array(COLS).fill(0));
+                        this.playArea.removeAll(true);
+                        const g = this.add.graphics();
+                        g.fillStyle(0x4b0082, 1);
+                        g.fillRoundedRect(0, 0, COLS * TILE, ROWS * TILE, 12);
+                        this.playArea.add(g);
+                        this.playArea.add(this.wallGraphics);
+                        this.drawMazeWalls();
+                        for (let yy = 0; yy < ROWS; yy++) {
+                            for (let xx = 0; xx < COLS; xx++) {
+                                if (this.settled[yy][xx]) {
+                                    const block = this.add.text(xx * TILE + TILE / 2, yy * TILE + TILE / 2, '', { fontSize: '26px' }).setOrigin(0.5);
+                                    this.playArea.add(block);
+                                }
+                            }
+                        }
+                        for (const v of this.veggies.getChildren()) this.playArea.add(v);
+                        this.playArea.add(this.player.sprite);
+                        this.rats.getChildren().forEach(rat => this.playArea.add(rat));
+                        this.updatePlayerSpritePosition();
+                        this.score += 20 * this.level;
+                        this.updateScore();
+                    }
+                }
+            }
+            updateScore() { this.uiScore.setText(`Score: ${this.score}`); }
+            updateNeeded() { this.uiNeeded.setText(`Need: ${this.needed - this.collectCount}`); }
+            updatePlayerSpritePosition() {
+                this.player.sprite.x = this.player.gx * TILE + TILE / 2;
+                this.player.sprite.y = this.player.gy * TILE + TILE / 2;
+            }
+            eatVegAt(x, y) {
+                for (let i = this.veggies.getLength() - 1; i >= 0; i--) {
+                    const v = this.veggies.getChildren()[i];
+                    if (v.gx === x && v.gy === y) {
+                        v.destroy();
+                        this.collectCount++;
+                        this.score += 10;
+                        this.updateScore();
+                        this.uiMsg.setText('What a good snack! You should snack veggies too');
+                        showSnackMessage();
+                        this.updateNeeded();
+                        if (this.collectCount >= this.needed) this.onLevelComplete();
+                        return true;
+                    }
+                }
+                return false;
+            }
+            onLevelComplete() {
+                this.uiMsg.setText('Building the cat\'s home... Thank you!');
+                showHomeBuilding(this.level);
+                this.time.delayedCall(1200, () => {
+                    this.score += 50 * this.level;
+                    this.updateScore();
+                    const quotes = {
+                        1: { author: "Nikola Tesla", text: "All my money has been invested into experiments with which I have made new discoveries enabling mankind to have a little easier life." },
+                        2: { author: "Alfred Nobel", text: "If I have a thousand ideas and only one turns out to be good, I am satisfied." },
+                        3: [
+                            { author: "Isaac Newton", text: "We build too many walls and not enough bridges." },
+                            { author: "Oky B", text: "Trakter saya makan siang ya pak bu support creator." }
+                        ],
+                        4: [
+                            { author: "Elon Musk", text: "Engineering is the closest thing to magic that exists in the world." },
+                            { author: "Oky B", text: "Trakter saya makan siang ya pak bu support creator." }
+                        ],
+                        5: [
+                            { author: "Wright Brothers", text: "If birds can glide for long periods of time, then… why can't I?" },
+                            { author: "Oky B", text: "Trakter saya makan siang ya pak bu support creator." }
+                        ],
+                        6: { author: "Arthur C. Clarke", text: "Politicians should read science fiction, not westerns and detective stories." },
+                        7: { author: "Albert Einstein", text: "Education is what remains after one has forgotten what one has learned in school." },
+                        8: [
+                            { author: "Leonardo da Vinci", text: "The noblest pleasure is the joy of understanding." },
+                            { author: "Mohammad Hatta", text: "With books, I feel free." }
+                        ]
+                    };
+                    const quoteData = quotes[this.level];
+                    if (quoteData) {
+                        if (Array.isArray(quoteData)) {
+                            quoteData.forEach(q => showQuoteMessage(q.text, q.author));
+                        } else {
+                            showQuoteMessage(quoteData.text, quoteData.author);
+                        }
+                    }
+                    if (this.level === 8) this.scene.start('WinScene', { score: this.score });
+                    else this.scene.start('TransitionScene', { nextLevel: this.level + 1, score: this.score });
+                });
+            }
+            loseLife() {
+                if (this.invuln) return;
+                this.lives -= 1;
+                this.uiLives.setText(`Lives: ${this.lives}`);
+                this.uiMsg.setText('Ouch! Instant food hurt the cat.');
+                this.invuln = true;
+                this.player.sprite.setAlpha(0.4);
+                this.time.delayedCall(1200, () => {
+                    this.invuln = false;
+                    this.player.sprite.setAlpha(1);
+                });
+                const sp = this.findOpenCell(2, 2);
+                this.player.gx = sp.x;
+                this.player.gy = sp.y;
+                this.updatePlayerSpritePosition();
+                if (this.lives <= 0) this.time.delayedCall(400, () => this.scene.start('LoseScene', { score: this.score }));
+            }
+            handleMove(dir) {
+                let nx = this.player.gx, ny = this.player.gy;
+                if (dir === 'left') nx--;
+                if (dir === 'right') nx++;
+                if (dir === 'up') ny--;
+                if (dir === 'down') ny++;
+                if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS && this.maze[ny][nx] === 0 && !this.settled[ny][nx]) {
+                    this.player.gx = nx;
+                    this.player.gy = ny;
+                    this.updatePlayerSpritePosition();
+                    this.eatVegAt(nx, ny);
+                }
+            }
+        }
+        class TransitionScene extends Phaser.Scene {
+            constructor() { super('TransitionScene'); }
+            init(data) { this.nextLevel = data.nextLevel; this.score = data.score; }
+            create() {
+                this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x8a2be2).setOrigin(0);
+                const text = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 100, `Level ${this.nextLevel - 1} complete!`, {
+                    fontSize: '26px', color: '#fff', fontStyle: 'bold'
+                }).setOrigin(0.5);
+                this.time.delayedCall(4000, () => {
+                    if (this.nextLevel > 8) this.scene.start('WinScene', { score: this.score });
+                    else this.scene.start('GameScene', { startLevel: this.nextLevel });
+                });
+            }
+        }
+        class WinScene extends Phaser.Scene {
+            constructor() { super('WinScene'); }
+            init(data) { this.finalScore = data.score || 0; }
+            create() {
+                this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x8a2be2).setOrigin(0);
+                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 150, 'YOU MADE THE CAT A HOME!', {
+                    fontSize: '30px', color: '#ffe9b5'
+                }).setOrigin(0.5);
+                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 90, 'Thank you for building my home!', {
+                    fontSize: '24px', color: '#ffe9b5'
+                }).setOrigin(0.5);
+                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 50, 'I hope you always find peace and a home in yourself.', {
+                    fontSize: '16px', color: '#ffe9b5'
+                }).setOrigin(0.5);
+                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 20, `
+                       _
+                      /\\_|
+                     /  \\|
+                    /____\\
+                   |📖  🏠  📖|
+                   |🏠  🚪  🏠|
+                   |__________🏠|
+                    `, {
+                        fontSize: '60px', color: '#fff', fontFamily: 'monospace'
+                    }).setOrigin(0.5);
+                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 120, `Final score: ${this.finalScore}`, {
+                    fontSize: '18px', color: '#cfe0ff'
+                }).setOrigin(0.5);
+                const btn = this.add.rectangle(this.cameras.main.centerX, this.cameras.main.centerY + 160, 220, 56, 0x2e6fb6).setInteractive();
+                const t = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 160, 'Play Again', {
+                    color: '#fff', fontSize: '18px'
+                }).setOrigin(0.5);
+                btn.on('pointerdown', () => this.scene.start('GameScene', { startLevel: 1 }));
+            }
+        }
+        class LoseScene extends Phaser.Scene {
+            constructor() { super('LoseScene'); }
+            init(data) { this.finalScore = data.score || 0; }
+            create() {
+                this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x8a2be2).setOrigin(0);
+                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 40, 'GAME OVER', {
+                    fontSize: '36px', color: '#ffb3b3'
+                }).setOrigin(0.5);
+                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 6, `Final score: ${this.finalScore}`, {
+                    fontSize: '18px', color: '#cfe0ff'
+                }).setOrigin(0.5);
+                const btn = this.add.rectangle(this.cameras.main.centerX, this.cameras.main.centerY + 72, 220, 56, 0xff6b6b).setInteractive();
+                const t = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 72, 'Try Again', {
+                    color: '#fff', fontSize: '18px'
+                }).setOrigin(0.5);
+                btn.on('pointerdown', () => this.scene.start('GameScene', { startLevel: 1 }));
+            }
+        }
+        function veggieEmoji(type) {
+            if (type === 'carrot') return '🥕';
+            if (type === 'broccoli') return '🥦';
+            return '🥬';
+        }
+        const config = {
+            type: Phaser.AUTO,
+            parent: 'game-container',
+            width: window.innerWidth,
+            height: window.innerHeight,
+            backgroundColor: '#8a2be2',
+            scene: [BootScene, MenuScene, GameScene, TransitionScene, WinScene, LoseScene],
+            physics: { default: 'arcade', arcade: { gravity: { y: 0 }, debug: false } },
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: window.innerWidth,
+                height: window.innerHeight,
+            }
+        };
+        const game = new Phaser.Game(config);
+        window.addEventListener('resize', () => {
+            game.scale.resize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
